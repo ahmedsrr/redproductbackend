@@ -1,5 +1,5 @@
 # Utiliser une image de base qui inclut PHP et PHP-FPM
-FROM php:8.2-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 # Installez les dépendances du système (nginx, et les extensions PHP)
 RUN apk add --no-cache nginx \
