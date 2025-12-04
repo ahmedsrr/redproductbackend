@@ -3,10 +3,10 @@ FROM php:8.5-fpm-alpine
 
 # Installez les dépendances du système (nginx, et les extensions PHP)
 RUN apk add --no-cache nginx \
-    php82-fpm \
-    php82-pdo_mysql \
-    php82-dom \
-    php82-mbstring \
+    php85-fpm \
+    php85-pdo_mysql \
+    php85-dom \
+    php85-mbstring \
     # Ajoutez toutes les autres extensions PHP nécessaires à votre projet
 
 # Définir le répertoire de travail
