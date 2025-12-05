@@ -1,36 +1,52 @@
+
+
 FROM php:8.2-fpm
 
-# 1. Mise à jour et installation des dépendances système
-RUN apt-get update && apt-get install -y \
+# --- ÉTAPE 1: Installation des outils de compilation et des dépendances ---
+# Ajout des paquets de développement pour toutes les extensions (lib*-dev)
+# et les outils de compilation (build-essential, autoconf).
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     unzip \
     libzip-dev \
     libonig-dev \
     libpng-dev \
-    && apt-get clean \
+    libjpeg-dev \
+    libxml2-dev \
+    build-essential \
+    autoconf \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Installation des extensions PHP requises par Laravel
-RUN docker-php-ext-install mbstring pdo_mysql tokenizer gd \
+# --- ÉTAPE 2: Installation de TOUTES les extensions PHP de Laravel ---
+# Installation atomique des extensions critiques.
+RUN docker-php-ext-configure gd --with-webp --with-jpeg \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install zip
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        mbstring \
+        zip \
+        gd \
+        tokenizer \
+        xml
 
-# Install Composer
+# --- ÉTAPE 3: Installation de Composer ---
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy app files
+# Copie des fichiers de l'application
 COPY . .
 
-# 3. Installation des dépendances PHP (Composer)
+# --- ÉTAPE 4: Installation des dépendances Composer ---
 RUN composer install --no-dev --optimize-autoloader
 
-# 4. Configuration des permissions (Critique pour Laravel)
+# --- ÉTAPE 5: Configuration des permissions et du cache ---
+# Création du cache de configuration pour la performance en production
+RUN php artisan config:cache
+# Le user par défaut est 'www-data' dans l'image FPM
 RUN chown -R www-data:www-data /var/www/storage \
     && chown -R www-data:www-data /var/www/bootstrap/cache
 
-# 5. Point d'entrée de l'application
+# Point d'entrée pour php-fpm
 CMD ["php-fpm"]
-
