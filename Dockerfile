@@ -1,19 +1,19 @@
+
 FROM php:8.2-fpm
 
 # 1. Mise à jour et installation des dépendances système
-# Ajout de libonig-dev (pour mbstring) et libzip-dev (pour zip)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     unzip \
     libzip-dev \
     libonig-dev \
+    libpng-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Installation des extensions PHP requises par Laravel
-# AJOUT CRITIQUE : pdo_mysql et tokenizer
-RUN docker-php-ext-install mbstring pdo_mysql tokenizer \
+RUN docker-php-ext-install mbstring pdo_mysql tokenizer gd \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
@@ -26,7 +26,6 @@ WORKDIR /var/www
 COPY . .
 
 # 3. Installation des dépendances PHP (Composer)
-# Note: Vérifiez bien l'orthographe du drapeau ici ! --optimize-autoloader
 RUN composer install --no-dev --optimize-autoloader
 
 # 4. Configuration des permissions (Critique pour Laravel)
@@ -35,3 +34,4 @@ RUN chown -R www-data:www-data /var/www/storage \
 
 # 5. Point d'entrée de l'application
 CMD ["php-fpm"]
+
