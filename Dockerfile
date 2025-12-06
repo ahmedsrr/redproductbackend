@@ -21,4 +21,6 @@ RUN php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear
 
+EXPOSE 8000
+
 CMD ["php-fpm"]
