@@ -1,4 +1,4 @@
-FROM php:8.4-fpm
+FROM php:8.4-fpm-cli
 
 RUN apt-get update && apt-get install -y \
     git curl unzip libpq-dev libonig-dev libzip-dev zip \
@@ -15,5 +15,6 @@ RUN composer install --no-dev --optimize-autoloader
 RUN php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear
-
+ENV PORT=8000
+EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=${PORT}"]
