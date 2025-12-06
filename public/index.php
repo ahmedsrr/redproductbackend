@@ -12,13 +12,7 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
-<?php
-// index.php (ou le fichier principal qui reçoit toutes les requêtes)
 
-// ----------------------------------------------------
-// 1. Chargement des dépendances et du .env
-// ----------------------------------------------------
-require 'vendor/autoload.php';
 
 // Charger les variables du fichier .env
 $dotenv = Dotenv\Dotenv::createImmutable(DIR);
