@@ -24,4 +24,4 @@ RUN php artisan config:clear && \
 EXPOSE 8000
 
 # Assurez-vous que le shell peut interpoler cette variable
-CMD php artisan serve --host=0.0.0.0 --port=${PORT}
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
