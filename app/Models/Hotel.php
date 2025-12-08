@@ -15,6 +15,7 @@ class Hotel extends Model
         'email',
         'phone',
         'price',
+        'user_id',
         'image',
         'description'
     ];
