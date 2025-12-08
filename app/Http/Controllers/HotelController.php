@@ -31,6 +31,8 @@ class HotelController extends Controller
         $request->validate([
             'name' => 'required|string',
             'address' => 'required|string',
+            'email' => 'required|email|max: 255',
+            'phone' => 'required|string|max: 255',
             'price' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string'
