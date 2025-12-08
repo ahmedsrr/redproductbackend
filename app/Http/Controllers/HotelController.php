@@ -39,6 +39,7 @@ class HotelController extends Controller
         ]);
 
         $data = $request->except('image');
+        $data['user_id']=auth()->id();
 
         if ($request->hasFile('image')) {
             // Stocke l'image dans storage/app/public/hotels
