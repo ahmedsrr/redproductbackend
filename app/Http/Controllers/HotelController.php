@@ -17,7 +17,7 @@ class HotelController extends Controller
         // Transformer les données pour inclure l'URL complète de l'image
         $hotels->transform(function ($hotel) {
             if ($hotel->image) {
-           $hotel->image_url = url('storage/' . $hotel->image);
+           $hotel->image_url=Storage::url($hotel->image);
 
             }
             return $hotel;
@@ -44,19 +44,15 @@ class HotelController extends Controller
 
         if ($request->hasFile('image')) {
             // Stocke l'image dans storage/app/public/hotels
-            $file = $request->file('image');
-
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-
-            $file->storeAs('hotels', $filename, 'public');
-            $data['image'] = $filename;
+            $path = $request->file('image')->store('hotels', 'public');
+            $data['image'] = $path;
         }
 
         $hotel = Hotel::create($data);
         
         // Retourne l'URL complète
         if ($hotel->image) {
-            $hotel->image_url = url('storage/hotels/' . $hotel->image);
+            $hotel->image_url = url('storage/' . $hotel->image);
         }
 
         return response()->json($hotel, 201);
