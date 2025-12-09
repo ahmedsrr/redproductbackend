@@ -17,7 +17,7 @@ class HotelController extends Controller
         // Transformer les données pour inclure l'URL complète de l'image
         $hotels->transform(function ($hotel) {
             if ($hotel->image) {
-           $hotel->image_url=Storage::url($hotel->image);
+           $hotel->image_url = url('storage/' . $hotel->image);
 
             }
             return $hotel;
