@@ -52,7 +52,7 @@ class HotelController extends Controller
         
         // Retourne l'URL complète
         if ($hotel->image) {
-            $hotel->image = url('storage/' . $hotel->image);
+            $hotel->image_url = url('storage/' . $hotel->image);
         }
 
         return response()->json($hotel, 201);
